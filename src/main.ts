@@ -1,6 +1,7 @@
 import './style.css'
 import Phaser from 'phaser'
 import { HEIGHT, WIDTH } from './constant'
+import GameScene from './scenes/game-scene'
 
 const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.AUTO,
@@ -12,7 +13,7 @@ const config: Phaser.Types.Core.GameConfig = {
             gravity: { y: 200 },
         },
     },
-    scene: [],
+    scene: [GameScene],
 }
 
 new Phaser.Game(config)
