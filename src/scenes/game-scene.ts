@@ -22,6 +22,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        // Add elements to the scene
         this.background = this.add.tileSprite(
             WIDTH / 2,
             HEIGHT / 2,
@@ -36,12 +37,20 @@ class GameScene extends Phaser.Scene {
             0,
             'floor'
         )
-        this.bird = new Bird(this, WIDTH/5, HEIGHT/2)
+        this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
+
+        // Handle input
+        this.input.on('pointerdown', this.handleInput, this)
+        this.input.keyboard?.on('keydown-SPACE', this.handleInput, this)
     }
 
     update(_time: number, delta: number): void {
         this.background.tilePositionX += BACKGROUND_SPEED * delta
         this.floor.tilePositionX += FLOOR_SPEED * delta
+    }
+
+    handleInput() {
+        this.bird.jump()
     }
 }
 
