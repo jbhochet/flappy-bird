@@ -2,6 +2,9 @@ import Phaser from 'phaser'
 import { JUMP_FORCE } from '../constant'
 
 class Bird extends Phaser.Physics.Arcade.Sprite {
+
+    declare body: Phaser.Physics.Arcade.Body
+
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'bird')
         this.anims.create({

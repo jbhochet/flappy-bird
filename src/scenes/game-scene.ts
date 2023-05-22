@@ -37,6 +37,8 @@ class GameScene extends Phaser.Scene {
             0,
             'floor'
         )
+        this.physics.add.existing(this.floor, true)
+
         this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
 
         // Handle input
@@ -47,11 +49,15 @@ class GameScene extends Phaser.Scene {
     update(_time: number, delta: number): void {
         this.background.tilePositionX += BACKGROUND_SPEED * delta
         this.floor.tilePositionX += FLOOR_SPEED * delta
+
+        this.physics.collide(this.bird, this.floor)
+        this.bird.body.checkWorldBounds()
     }
 
     handleInput() {
         this.bird.jump()
     }
+
 }
 
 export default GameScene
