@@ -5,6 +5,7 @@ class GameScene extends Phaser.Scene {
     private background!: Phaser.GameObjects.TileSprite
     private floor!: Phaser.GameObjects.TileSprite
     private message!: Phaser.GameObjects.Image
+    private gameover!: Phaser.GameObjects.Image
     private bird!: Bird
 
     constructor() {
@@ -17,6 +18,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('background', 'background-day.png')
         this.load.image('floor', 'base.png')
         this.load.image('message', 'message.png')
+        this.load.image('gameover', 'gameover.png')
         this.load.spritesheet('bird', 'redbird.png', {
             frameWidth: 34,
             frameHeight: 24,
@@ -41,10 +43,14 @@ class GameScene extends Phaser.Scene {
         )
         this.physics.add.existing(this.floor, true)
 
-        this.message = this.add.image(WIDTH/2, HEIGHT/2, 'message')
-
         this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
         this.bird.body.setAllowGravity(false)
+        this.bird.setVisible(false)
+
+        this.message = this.add.image(WIDTH / 2, HEIGHT / 2, 'message')
+
+        this.gameover = this.add.image(WIDTH / 2, HEIGHT / 2, 'gameover')
+        this.gameover.setVisible(false)
 
         // Handle input
         this.input.on('pointerdown', this.handleInput, this)
@@ -52,19 +58,36 @@ class GameScene extends Phaser.Scene {
     }
 
     update(_time: number, delta: number): void {
-        this.background.tilePositionX += BACKGROUND_SPEED * delta
-        this.floor.tilePositionX += FLOOR_SPEED * delta
+        if (!this.gameover.visible) {
+            this.background.tilePositionX += BACKGROUND_SPEED * delta
+            this.floor.tilePositionX += FLOOR_SPEED * delta
+        }
 
-        this.physics.collide(this.bird, this.floor)
+        this.physics.collide(
+            this.bird,
+            this.floor,
+            this.handleCollision,
+            undefined,
+            this
+        )
+
         this.bird.body.checkWorldBounds()
     }
 
     handleInput() {
-        if(this.message.visible) {
+        if (this.message.visible) {
             this.message.setVisible(false)
+            this.bird.setVisible(true)
             this.bird.body.setAllowGravity(true)
+        } else if (this.gameover.visible) {
+            this.gameover.setVisible(false)
+            this.bird.reset()
         }
         this.bird.jump()
+    }
+
+    handleCollision() {
+        if (!this.gameover.visible) this.gameover.setVisible(true)
     }
 }
 
