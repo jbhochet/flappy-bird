@@ -4,6 +4,7 @@ import Bird from '../objects/bird'
 class GameScene extends Phaser.Scene {
     private background!: Phaser.GameObjects.TileSprite
     private floor!: Phaser.GameObjects.TileSprite
+    private message!: Phaser.GameObjects.Image
     private bird!: Bird
 
     constructor() {
@@ -15,6 +16,7 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.load.image('background', 'background-day.png')
         this.load.image('floor', 'base.png')
+        this.load.image('message', 'message.png')
         this.load.spritesheet('bird', 'redbird.png', {
             frameWidth: 34,
             frameHeight: 24,
@@ -39,7 +41,10 @@ class GameScene extends Phaser.Scene {
         )
         this.physics.add.existing(this.floor, true)
 
+        this.message = this.add.image(WIDTH/2, HEIGHT/2, 'message')
+
         this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
+        this.bird.body.setAllowGravity(false)
 
         // Handle input
         this.input.on('pointerdown', this.handleInput, this)
@@ -55,9 +60,12 @@ class GameScene extends Phaser.Scene {
     }
 
     handleInput() {
+        if(this.message.visible) {
+            this.message.setVisible(false)
+            this.bird.body.setAllowGravity(true)
+        }
         this.bird.jump()
     }
-
 }
 
 export default GameScene
