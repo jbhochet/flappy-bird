@@ -17,6 +17,7 @@ class GameScene extends Phaser.Scene {
     private bird!: Bird
     private pipes!: Phaser.Physics.Arcade.Group
     private pipesTimer!: Phaser.Time.TimerEvent
+    private emitter!: Phaser.GameObjects.Particles.ParticleEmitter
 
     constructor() {
         super({
@@ -30,6 +31,7 @@ class GameScene extends Phaser.Scene {
         this.load.image('message', 'message.png')
         this.load.image('gameover', 'gameover.png')
         this.load.image('pipe', 'pipe-green.png')
+        this.load.image('feather', 'feather.png')
         this.load.spritesheet('bird', 'redbird.png', {
             frameWidth: 34,
             frameHeight: 24,
@@ -58,6 +60,16 @@ class GameScene extends Phaser.Scene {
         this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
         this.bird.body.setAllowGravity(false)
         this.bird.setVisible(false)
+
+        this.emitter = this.add.particles(0, 0, 'feather', {
+            follow: this.bird,
+            lifespan: 5000,
+            gravityY: 150,
+            emitting: false,
+            scale: { min: 0.5, max: 1.5 },
+            speed: { min: 159, max: 250 },
+            rotate: { min: 0, max: 360},
+        })
 
         this.message = this.add.image(WIDTH / 2, HEIGHT / 2, 'message')
 
@@ -125,6 +137,7 @@ class GameScene extends Phaser.Scene {
         } else if (this.gameover.visible) {
             this.gameover.setVisible(false)
             this.bird.reset()
+            this.bird.setVisible(true)
             this.pipes.clear(true, true)
             this.pipes.setVelocityX(PIPE_SPEED)
             this.pipesTimer.paused = false
@@ -134,6 +147,8 @@ class GameScene extends Phaser.Scene {
 
     handleCollision() {
         if (this.gameover.visible) return
+        this.bird.setVisible(false)
+        this.emitter.explode(100)
         this.gameover.setVisible(true)
         this.pipesTimer.paused = true
         this.pipes.setVelocityX(0)
