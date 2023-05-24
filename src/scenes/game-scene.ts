@@ -90,6 +90,13 @@ class GameScene extends Phaser.Scene {
             this.floor.tilePositionX += FLOOR_SPEED * delta
         }
 
+        this.pipes.getChildren().forEach((p) => {
+            if (p instanceof Pipe) {
+                if (p.x < -this.textures.get('pipe').getSourceImage().width / 2)
+                    this.pipes.remove(p, true)
+            }
+        })
+
         this.physics.collide(
             this.bird,
             this.floor,
