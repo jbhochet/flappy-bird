@@ -8,6 +8,7 @@ import {
 } from '../constant'
 import Bird from '../objects/bird'
 import Pipe from '../objects/pipe'
+import Score from '../objects/score'
 
 class GameScene extends Phaser.Scene {
     private background!: Phaser.GameObjects.TileSprite
@@ -18,6 +19,7 @@ class GameScene extends Phaser.Scene {
     private pipes!: Phaser.Physics.Arcade.Group
     private pipesTimer!: Phaser.Time.TimerEvent
     private emitter!: Phaser.GameObjects.Particles.ParticleEmitter
+    private score!: Score
 
     constructor() {
         super({
@@ -68,7 +70,7 @@ class GameScene extends Phaser.Scene {
             emitting: false,
             scale: { min: 0.5, max: 1.5 },
             speed: { min: 159, max: 250 },
-            rotate: { min: 0, max: 360},
+            rotate: { min: 0, max: 360 },
         })
 
         this.message = this.add.image(WIDTH / 2, HEIGHT / 2, 'message')
@@ -90,6 +92,9 @@ class GameScene extends Phaser.Scene {
             callbackScope: this,
             paused: true,
         })
+
+        this.score = new Score(this, 10, 10)
+        this.score.setDepth(1)
 
         // Handle input
         this.input.on('pointerdown', this.handleInput, this)
@@ -138,6 +143,7 @@ class GameScene extends Phaser.Scene {
             this.gameover.setVisible(false)
             this.bird.reset()
             this.bird.setVisible(true)
+            this.score.reset()
             this.pipes.clear(true, true)
             this.pipes.setVelocityX(PIPE_SPEED)
             this.pipesTimer.paused = false
@@ -172,6 +178,7 @@ class GameScene extends Phaser.Scene {
             false
         )
         this.pipes.addMultiple([top, bottom])
+        this.score.increment()
     }
 }
 
