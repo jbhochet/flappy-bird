@@ -14,6 +14,10 @@ const config: Phaser.Types.Core.GameConfig = {
         },
     },
     scene: [GameScene],
+    scale: {
+        mode: Phaser.Scale.ScaleModes.FIT,
+        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+    },
 }
 
 new Phaser.Game(config)
