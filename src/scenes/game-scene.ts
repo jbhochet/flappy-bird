@@ -38,6 +38,7 @@ class GameScene extends Phaser.Scene {
             frameWidth: 34,
             frameHeight: 24,
         })
+        this.load.audio('wing', ['audio/wing.ogg', 'audio/wing.wav'])
     }
 
     create() {
@@ -148,6 +149,7 @@ class GameScene extends Phaser.Scene {
             this.pipes.setVelocityX(PIPE_SPEED)
             this.pipesTimer.paused = false
         }
+        this.sound.play('wing')
         this.bird.jump()
     }
 
