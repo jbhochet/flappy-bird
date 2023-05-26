@@ -39,6 +39,7 @@ class GameScene extends Phaser.Scene {
             frameHeight: 24,
         })
         this.load.audio('wing', ['audio/wing.ogg', 'audio/wing.wav'])
+        this.load.audio('hit', ['audio/hit.ogg', 'audio/hit.wav'])
     }
 
     create() {
@@ -155,6 +156,7 @@ class GameScene extends Phaser.Scene {
 
     handleCollision() {
         if (this.gameover.visible) return
+        this.sound.play('hit')
         this.bird.setVisible(false)
         this.emitter.explode(100)
         this.gameover.setVisible(true)
