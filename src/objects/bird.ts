@@ -1,6 +1,9 @@
 import Phaser from 'phaser'
 import { JUMP_FORCE } from '../constant'
 
+/**
+ * Represents the bird
+ */
 class Bird extends Phaser.Physics.Arcade.Sprite {
     declare body: Phaser.Physics.Arcade.Body
     defaultX: number
@@ -21,11 +24,17 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this)
     }
 
-    jump(): void {
+    /**
+     * Makes the bird jump
+     */
+    public jump(): void {
         this.setVelocityY(-JUMP_FORCE)
     }
 
-    reset(): void {
+    /**
+     * Resets the bird to its initial position
+     */
+    public reset(): void {
         this.body.reset(this.defaultX, this.defaultY)
     }
 }

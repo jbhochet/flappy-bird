@@ -1,5 +1,8 @@
 import Phaser from 'phaser'
 
+/**
+ * Reoresents a pipe
+ */
 class Pipe extends Phaser.Physics.Arcade.Image {
     declare body: Phaser.Physics.Arcade.Body
 
