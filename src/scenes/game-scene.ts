@@ -30,21 +30,6 @@ class GameScene extends Phaser.Scene {
         })
     }
 
-    preload() {
-        this.load.image('background', 'background-day.png')
-        this.load.image('floor', 'base.png')
-        this.load.image('message', 'message.png')
-        this.load.image('gameover', 'gameover.png')
-        this.load.image('pipe', 'pipe-green.png')
-        this.load.image('feather', 'feather.png')
-        this.load.spritesheet('bird', 'redbird.png', {
-            frameWidth: 34,
-            frameHeight: 24,
-        })
-        this.load.audio('wing', ['audio/wing.ogg', 'audio/wing.wav'])
-        this.load.audio('hit', ['audio/hit.ogg', 'audio/hit.wav'])
-    }
-
     create() {
         // Add background
         this.background = this.add.tileSprite(
