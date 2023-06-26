@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 import { HEIGHT, WIDTH } from './constant'
 import BootScene from './scenes/boot-scene'
 import GameScene from './scenes/game-scene'
+import MainMenuScene from './scenes/main-menu-scene'
 
 const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.AUTO,
@@ -14,7 +15,7 @@ const config: Phaser.Types.Core.GameConfig = {
             gravity: { y: 200 },
         },
     },
-    scene: [BootScene, GameScene],
+    scene: [BootScene, MainMenuScene, GameScene],
     scale: {
         mode: Phaser.Scale.ScaleModes.FIT,
         autoCenter: Phaser.Scale.Center.CENTER_BOTH,

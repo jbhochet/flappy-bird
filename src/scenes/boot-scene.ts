@@ -23,6 +23,8 @@ class BootScene extends Phaser.Scene {
         this.load.image('icon', 'favicon.ico')
         this.load.image('background', 'background-day.png')
         this.load.image('floor', 'base.png')
+        this.load.image('button', 'button.png')
+        this.load.image('button-pressed', 'button-pressed.png')
         this.load.image('message', 'message.png')
         this.load.image('gameover', 'gameover.png')
         this.load.image('pipe', 'pipe-green.png')
@@ -49,7 +51,7 @@ class BootScene extends Phaser.Scene {
             this.time.delayedCall(
                 1000,
                 () => {
-                    this.scene.start('GameScene')
+                    this.scene.start('MainMenuScene')
                 },
                 undefined,
                 this

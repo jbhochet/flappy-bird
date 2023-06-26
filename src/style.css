@@ -2,3 +2,8 @@ body {
     margin: 0;
     background: black;
 }
+
+@font-face {
+    font-family: FlappyBird;
+    src: url('/flappy-bird.ttf');
+}
