@@ -25,6 +25,7 @@ class BootScene extends Phaser.Scene {
         this.load.image('floor', 'base.png')
         this.load.image('button', 'button.png')
         this.load.image('button-pressed', 'button-pressed.png')
+        this.load.image('score-box', 'score-box.png')
         this.load.image('message', 'message.png')
         this.load.image('gameover', 'gameover.png')
         this.load.image('pipe', 'pipe-green.png')

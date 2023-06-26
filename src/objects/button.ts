@@ -1,19 +1,35 @@
-class Button extends Phaser.GameObjects.Image {
-    constructor(scene: Phaser.Scene, x: number, y: number, callback: Function) {
-        super(scene, x, y, 'button')
+class Button extends Phaser.GameObjects.Container {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        label: string,
+        callback: Function
+    ) {
+        super(scene, x, y)
 
-        scene.add.existing(this)
-
-        this.setInteractive()
-
-        this.on('pointerdown', () => {
-            this.setTexture('button-pressed')
+        let img = new Phaser.GameObjects.Image(scene, 0, 0, 'button')
+        let text = new Phaser.GameObjects.Text(scene, 0, 0, label, {
+            fontFamily: 'FlappyBird',
+            fontSize: 32,
         })
 
-        this.on('pointerup', () => {
-            this.setTexture('button')
+        Phaser.Display.Align.In.TopCenter(text, img)
+
+        this.add([img, text])
+
+        img.setInteractive()
+
+        img.on('pointerdown', () => {
+            img.setTexture('button-pressed')
+        })
+
+        img.on('pointerup', () => {
+            img.setTexture('button')
             callback()
         })
+
+        scene.add.existing(this)
     }
 }
 

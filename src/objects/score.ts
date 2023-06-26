@@ -8,7 +8,8 @@ class Score extends Phaser.GameObjects.Text {
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, '0', {
-            fontSize: 25,
+            fontFamily: 'FlappyBird',
+            fontSize: 64,
         })
         this.score = 0
         scene.add.existing(this)
@@ -35,6 +36,13 @@ class Score extends Phaser.GameObjects.Text {
     public reset(): void {
         this.score = 0
         this.refresh()
+    }
+
+    /**
+     * Returns the current score
+     */
+    public getScore(): number {
+        return this.score
     }
 }
 

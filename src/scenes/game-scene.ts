@@ -7,8 +7,11 @@ import {
     WIDTH,
 } from '../constant'
 import Bird from '../objects/bird'
+import Button from '../objects/button'
 import Pipe from '../objects/pipe'
 import Score from '../objects/score'
+import ScoreTab from '../objects/score-tab'
+import { getBestScore, setBestScore } from '../utils/data'
 
 /**
  * Represents the main scene of the game
@@ -17,12 +20,12 @@ class GameScene extends Phaser.Scene {
     private background!: Phaser.GameObjects.TileSprite
     private floor!: Phaser.GameObjects.TileSprite
     private message!: Phaser.GameObjects.Image
-    private gameover!: Phaser.GameObjects.Image
     private bird!: Bird
     private pipes!: Phaser.Physics.Arcade.Group
     private pipesTimer!: Phaser.Time.TimerEvent
     private emitter!: Phaser.GameObjects.Particles.ParticleEmitter
     private score!: Score
+    private gameover!: boolean
 
     constructor() {
         super({
@@ -31,6 +34,8 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        this.gameover = false
+
         // Add background
         this.background = this.add.tileSprite(
             WIDTH / 2,
@@ -39,22 +44,16 @@ class GameScene extends Phaser.Scene {
             0,
             'background'
         )
-
         // Add floor
-        this.floor = this.add.tileSprite(
-            WIDTH / 2,
-            HEIGHT - this.textures.get('floor').getSourceImage().height / 2,
-            0,
-            0,
-            'floor'
-        )
+        this.floor = this.add.tileSprite(0, 0, 0, 0, 'floor')
         this.floor.depth = 1
+        Phaser.Display.Align.In.BottomCenter(this.floor, this.background)
         this.physics.add.existing(this.floor, true)
 
         // Add bird
-        this.bird = new Bird(this, WIDTH / 5, HEIGHT / 2)
+        this.bird = new Bird(this, 0,0)
         this.bird.body.setAllowGravity(false)
-        this.bird.setVisible(false)
+        Phaser.Display.Align.In.LeftCenter(this.bird, this.background, -20)
 
         // Add particles emitter
         this.emitter = this.add.particles(0, 0, 'feather', {
@@ -69,11 +68,6 @@ class GameScene extends Phaser.Scene {
 
         // Add message image
         this.message = this.add.image(WIDTH / 2, HEIGHT / 2, 'message')
-
-        // Add gameover image
-        this.gameover = this.add.image(WIDTH / 2, HEIGHT / 2, 'gameover')
-        this.gameover.depth = 1
-        this.gameover.setVisible(false)
 
         // Create and setup pipes group
         this.pipes = this.physics.add.group({
@@ -93,6 +87,7 @@ class GameScene extends Phaser.Scene {
 
         this.score = new Score(this, 10, 10)
         this.score.setDepth(1)
+        Phaser.Display.Align.In.TopCenter(this.score, this.background, 0, -20)
 
         // Handle input
         this.input.on('pointerdown', this.handleInput, this)
@@ -101,7 +96,7 @@ class GameScene extends Phaser.Scene {
 
     update(_time: number, delta: number): void {
         // Stops floor and background scrolling when the game is lost
-        if (!this.gameover.visible) {
+        if (!this.gameover) {
             this.background.tilePositionX += BACKGROUND_SPEED * delta
             this.floor.tilePositionX += FLOOR_SPEED * delta
         }
@@ -137,23 +132,13 @@ class GameScene extends Phaser.Scene {
     }
 
     /**
-     * Represents the main scene of the game
+     * Handle user inputs
      */
     handleInput() {
         if (this.message.visible) {
             // The game starts for the first time
             this.message.setVisible(false)
-            this.bird.setVisible(true)
             this.bird.body.setAllowGravity(true)
-            this.pipesTimer.paused = false
-        } else if (this.gameover.visible) {
-            // Resets the game after a lost game
-            this.gameover.setVisible(false)
-            this.bird.reset()
-            this.bird.setVisible(true)
-            this.score.reset()
-            this.pipes.clear(true, true)
-            this.pipes.setVelocityX(PIPE_SPEED)
             this.pipesTimer.paused = false
         }
         // Makes the bird jump
@@ -165,13 +150,38 @@ class GameScene extends Phaser.Scene {
      * Ends the game in a collision
      */
     handleCollision() {
-        if (this.gameover.visible) return
+        if (this.gameover) return
+
+        // stop the game
+        this.gameover = true
         this.sound.play('hit')
         this.bird.setVisible(false)
         this.emitter.explode(100)
-        this.gameover.setVisible(true)
         this.pipesTimer.paused = true
         this.pipes.setVelocityX(0)
+        this.score.setVisible(false)
+
+        // store score if it is the best
+        const best = getBestScore()
+        const score = this.score.getScore()
+        if (score > best) setBestScore(score)
+
+        // show gameover and score
+        let gameoverImg = this.add.image(0, 0, 'gameover')
+
+        let scoreTab = new ScoreTab(this, 0, 0, this.score.getScore())
+
+        let btnOk = new Button(this, 0, 0, 'Ok', () => {
+            this.scene.start('MainMenuScene')
+        })
+        btnOk.setDepth(1)
+
+        // align gameover image
+        Phaser.Display.Align.In.TopCenter(gameoverImg, this.background, 0, -50)
+        // align display score
+        Phaser.Display.Align.In.Center(scoreTab, this.background, 0, 0)
+        // align button
+        Phaser.Display.Align.In.BottomCenter(btnOk, this.background, 0, -100)
     }
 
     /**
@@ -196,6 +206,7 @@ class GameScene extends Phaser.Scene {
         )
         this.pipes.addMultiple([top, bottom])
         this.score.increment()
+        Phaser.Display.Align.In.TopCenter(this.score, this.background, 0, -20)
     }
 }
 

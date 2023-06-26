@@ -21,12 +21,8 @@ class MainMenuScene extends Phaser.Scene {
                 fill: true,
             },
         })
-        const btnPlay = new Button(this, 0, 0, () => {
+        const btnPlay = new Button(this, 0, 0, 'Play', () => {
             this.scene.start('GameScene')
-        })
-        const btnPlayLabel = this.add.text(0, 0, 'Play', {
-            fontFamily: 'FlappyBird',
-            fontSize: 32,
         })
 
         // Cnter title
@@ -34,7 +30,6 @@ class MainMenuScene extends Phaser.Scene {
 
         // Center button and label
         Phaser.Display.Align.In.Center(btnPlay, background)
-        Phaser.Display.Align.In.TopCenter(btnPlayLabel, btnPlay)
 
         // Center text in button
         Phaser.Display.Align.In.BottomCenter(floor, background)
