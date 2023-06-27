@@ -1,4 +1,4 @@
-import { getBestScore } from "../utils/data"
+import { getBestScore } from '../utils/data'
 
 class ScoreTab extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene, x: number, y: number, score: number) {

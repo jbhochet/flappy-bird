@@ -51,7 +51,7 @@ class GameScene extends Phaser.Scene {
         this.physics.add.existing(this.floor, true)
 
         // Add bird
-        this.bird = new Bird(this, 0,0)
+        this.bird = new Bird(this, 0, 0)
         this.bird.body.setAllowGravity(false)
         Phaser.Display.Align.In.LeftCenter(this.bird, this.background, -20)
 
