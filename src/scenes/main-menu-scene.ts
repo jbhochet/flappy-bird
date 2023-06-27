@@ -25,13 +25,15 @@ class MainMenuScene extends Phaser.Scene {
             this.scene.start('GameScene')
         })
 
-        // Cnter title
-        Phaser.Display.Align.In.TopCenter(title, background, 0, -40)
+        const offset = 110
+
+        // Center title
+        Phaser.Display.Align.In.Center(title, background, 0, -offset)
 
         // Center button and label
-        Phaser.Display.Align.In.Center(btnPlay, background)
+        Phaser.Display.Align.In.Center(btnPlay, background, 0, offset)
 
-        // Center text in button
+        // Center floor at bottom
         Phaser.Display.Align.In.BottomCenter(floor, background)
     }
 }
